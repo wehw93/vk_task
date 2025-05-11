@@ -2,25 +2,32 @@
 
 gRPC сервис для подписки и публикации событий.
 
+
 ## Описание
 
 Сервис предоставляет два метода:
 1. `Subscribe` - подписка на события по ключу (server-side streaming)
 2. `Publish` - публикация события по ключу
 
+## Установка
+
+```bash
+https://github.com/wehw93/vk_task.git
+```
+
 ## Запуск
 
-1. Установите зависимости:
+### 1. Установите зависимости:
 ```bash
 go mod tidy
 ```
 
-## Сгенерируйте gRPC код:
+### 2. Сгенерируйте gRPC код:
 
 ```bash
 protoc --go_out=. --go-grpc_out=. proto/pubsub.proto
 ```
-## Запустите сервер:
+### 3. Запустите сервер:
 
 ```bash
 go run cmd/server/main.go
@@ -29,15 +36,14 @@ go run cmd/server/main.go
 По умолчанию сервер запускается на порту 44044. Можно изменить конфигурацию в config/config.yaml.
 
 ## Особенности реализации
-Используется паттерн Publisher-Subscriber из первой части задания
+   - Используется паттерн Publisher-Subscriber из первой части задания
 
-Реализован graceful shutdown
+   - Реализован graceful shutdown
 
-Используется dependency injection для передачи SubPub в сервис
+   - Используется dependency injection для передачи SubPub в сервис
 
-Логирование выводится в stdout
-
-
+   - Логирование выводится в stdout
+   - 
 ## Объяснение решения
 
 1. **Часть 1: SubPub**:
