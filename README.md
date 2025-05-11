@@ -56,7 +56,7 @@ grpcurl -plaintext -d '{"key": "test", "data": "Hello world"}' localhost:44044 p
 
 ## Скриншот примера работы:
 
-![alt text](image-1.png)
+
 
 ## Конфигурация
 По умолчанию сервер запускается на порту 44044. Можно изменить конфигурацию в config/config.yaml.
