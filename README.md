@@ -12,7 +12,7 @@ gRPC сервис для подписки и публикации событий
 ## Установка
 
 ```bash
-https://github.com/wehw93/vk_task.git
+ git clone https://github.com/wehw93/vk_task.git
 ```
 
 ## Запуск
