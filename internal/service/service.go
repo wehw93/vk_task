@@ -4,8 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"vk_task/proto"                  
 	"vk_task/pkg/subpub"
+	"vk_task/proto"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

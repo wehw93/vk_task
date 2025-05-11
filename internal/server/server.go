@@ -1,17 +1,12 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
-
 	"vk_task/internal/config"
-	"vk_task/internal/service"
-	"vk_task/pkg/subpub"
-	"vk_task/proto"
 
 	"google.golang.org/grpc"
 )
@@ -19,27 +14,19 @@ import (
 type Server struct {
 	grpcServer *grpc.Server
 	config     *config.Config
-	bus        subpub.SubPub
 }
 
-func NewServer(cfg *config.Config) *Server {
-	bus := subpub.NewSubPub()
-	service := service.NewPubSubService(bus)
-
-	grpcServer := grpc.NewServer()
-	proto.RegisterPubSubServer(grpcServer, service)
-
+func NewServer(cfg *config.Config, grpcServer *grpc.Server) *Server {
 	return &Server{
 		grpcServer: grpcServer,
 		config:     cfg,
-		bus:        bus,
 	}
 }
 
 func (s *Server) Run() error {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.config.GRPC.Port))
 	if err != nil {
-		return fmt.Errorf("failed to listen: %v", err)
+		return fmt.Errorf("failed to listen: %w", err)
 	}
 
 	go func() {
@@ -48,19 +35,13 @@ func (s *Server) Run() error {
 		}
 	}()
 
-	fmt.Printf("Server started on port %d\n", s.config.GRPC.Port)
-
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	fmt.Println("Shutting down server...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), s.config.GRPC.Timeout)
-	defer cancel()
+	//ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	//defer cancel()
 
 	s.grpcServer.GracefulStop()
-	s.bus.Close(ctx)
-
 	return nil
 }
