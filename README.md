@@ -25,13 +25,39 @@ go mod tidy
 ### 2. Сгенерируйте gRPC код:
 
 ```bash
-protoc --go_out=. --go-grpc_out=. proto/pubsub.proto
+make proto
 ```
-### 3. Запустите сервер:
+### 3. Запустите тесты:
+```bash
+make runTestsSubPub
+```
+
+### 4. Запустите сервер:
 
 ```bash
-go run cmd/server/main.go
+make
 ```
+
+## Пример работы
+
+### В одном терминале запустите подписку:
+```bash
+grpcurl -plaintext -d '{"key": "test"}' localhost:44044 pubsub.PubSub/Subscribe
+```
+### В другом терминале отправьте сообщение:
+```bash
+grpcurl -plaintext -d '{"key": "test", "data": "Hello world"}' localhost:44044 pubsub.PubSub/Publish
+```
+### Должны увидеть:
+
+{
+  "data": "Hello world"
+}
+
+## Скриншот примера работы:
+
+![alt text](image-1.png)
+
 ## Конфигурация
 По умолчанию сервер запускается на порту 44044. Можно изменить конфигурацию в config/config.yaml.
 
